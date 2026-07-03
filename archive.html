@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screener Archive</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f3f4f6; color:#111827; padding:16px; }
+  .card { max-width:640px; margin:0 auto; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+  .hdr { background:linear-gradient(135deg,#111827,#1e3a5f); padding:20px 24px; }
+  .hdr h1 { margin:0; color:#fff; font-size:19px; font-weight:600; }
+  .hdr p { margin:5px 0 0; color:#9ca3af; font-size:12.5px; }
+  ul { list-style:none; margin:0; padding:8px 0; }
+  li a { display:block; padding:12px 24px; color:#2563eb; text-decoration:none; font-weight:600; font-size:14px; border-bottom:1px solid #f1f5f9; }
+  li a:hover { background:#f8fafc; }
+  #msg { padding:16px 24px; color:#6b7280; font-size:13px; }
+  .ftr { padding:12px 24px; background:#f8fafc; border-top:1px solid #e5e7eb; font-size:11px; color:#9ca3af; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr"><h1>📁 Screener Archive</h1><p>Every daily report · <a href="index.html" style="color:#93c5fd;">← Latest report</a></p></div>
+  <div id="msg">Loading…</div>
+  <ul id="list"></ul>
+  <div class="ftr">Reports are kept as report-YYYY-MM-DD.html. Not investment advice.</div>
+</div>
+<script>
+fetch('https://api.github.com/repos/aikokc/aikokc.github.io/contents/')
+  .then(r => r.json())
+  .then(files => {
+    const reports = files.filter(f => /^report-\d{4}-\d{2}-\d{2}\.html$/.test(f.name)).sort((a,b) => b.name.localeCompare(a.name));
+    document.getElementById('msg').textContent = reports.length ? '' : 'No reports yet.';
+    document.getElementById('list').innerHTML = reports.map(f => {
+      const d = f.name.match(/report-(\d{4})-(\d{2})-(\d{2})/);
+      const date = new Date(d[1], d[2]-1, d[3]).toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+      return '<li><a href="' + f.name + '">📈 ' + date + '</a></li>';
+    }).join('');
+  })
+  .catch(() => document.getElementById('msg').textContent = 'Could not load the list — browse the repo directly at github.com/aikokc/aikokc.github.io');
+</script>
+</body>
+</html>
