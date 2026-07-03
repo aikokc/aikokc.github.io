@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Stock Screener</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f3f4f6; color:#111827; padding:16px; }
+  .card { max-width:1100px; margin:0 auto; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+  .hdr { background:linear-gradient(135deg,#111827,#1e3a5f); padding:20px 24px; }
+  .hdr h1 { margin:0; color:#fff; font-size:19px; font-weight:600; }
+  .hdr p { margin:5px 0 0; color:#9ca3af; font-size:12.5px; }
+  .sub { padding:12px 24px; background:#f8fafc; border-bottom:1px solid #e5e7eb; font-size:12.5px; color:#374151; }
+  #status { font-weight:600; color:#6b7280; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { padding:8px 10px; font-size:10px; color:#6b7280; text-transform:uppercase; border-bottom:1px solid #e5e7eb; background:#f9fafb; text-align:right; }
+  th:nth-child(1), th:nth-child(2), th:nth-child(10) { text-align:left; }
+  th:nth-child(5), th:nth-child(6), th:nth-child(11) { text-align:center; }
+  td { padding:9px 10px; border-bottom:1px solid #e5e7eb; text-align:right; }
+  td.l { text-align:left; } td.c { text-align:center; }
+  .tick { font-weight:700; }
+  .name { color:#6b7280; font-size:12px; text-align:left; }
+  .pat { padding:3px 8px; border-radius:12px; font-size:10.5px; font-weight:600; white-space:nowrap; }
+  .note td { padding:2px 10px 8px; color:#9ca3af; font-size:11px; font-style:italic; border-bottom:1px solid #f1f5f9; text-align:left; }
+  .up { color:#16a34a; } .dn { color:#dc2626; }
+  .btn { display:inline-block; padding:5px 9px; border-radius:6px; font-size:10.5px; font-weight:700; color:#fff !important; text-decoration:none; white-space:nowrap; margin:1px; }
+  .qlink { font-weight:700; text-decoration:none; font-size:12px; white-space:nowrap; }
+  .tpsl { font-size:11px; text-align:left; }
+  .ftr { padding:12px 24px; background:#f8fafc; border-top:1px solid #e5e7eb; font-size:11px; color:#9ca3af; }
+  .stale { color:#9ca3af; font-size:10px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <h1>📈 Daily Stock Screener</h1>
+    <p>VCP &amp; Ascending Triangle · Screened July 2, 2026 (close) · SA Quant &amp; Fwd P/E from Seeking Alpha Premium</p>
+  </div>
+  <div class="sub">15 picks · ⚠ = caution (RSI&gt;70 or near 52W high) · <span id="status">Refreshing live prices…</span></div>
+  <div style="overflow-x:auto;">
+  <table id="tbl">
+    <thead><tr>
+      <th>Ticker</th><th>Name</th><th>Price</th><th>Chg</th><th>Pattern</th><th>SA Quant</th>
+      <th>Fwd P/E</th><th>R/R</th><th>Score</th><th>TP / SL · Position</th><th>Links</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  </div>
+  <div class="ftr">Prices refresh each time this page opens (TradingView/Yahoo). Quant, Fwd P/E, patterns, and targets are a snapshot from the July 2, 2026 screen. Informational only — not investment advice.</div>
+</div>
+<script>
+const PICKS = [
+ {r:1,t:"AIG",n:"American International Group",ex:"NYSE",p:79.39,c:3.66,pat:"VCP + Ascending Triangle",q:"Hold (3.31)",qr:"Hold",pe:"9.9",rr:2.22,sc:88,tp:87.29,sl:75.83,sh:25,caution:false,note:"Very tight squeeze (BBW 0.067) breaking above upper band; 9% below 52W high."},
+ {r:2,t:"ADC",n:"Agree Realty",ex:"NYSE",p:77.81,c:2.01,pat:"VCP + Ascending Triangle",q:"Buy (3.71)",qr:"Buy",pe:"40.9",rr:1.64,sc:84,tp:81.70,sl:75.44,sh:25,caution:false,note:"REIT (lower beta than guideline); tight squeeze closing right at upper band."},
+ {r:3,t:"AER",n:"AerCap Holdings",ex:"NYSE",p:147.84,c:4.17,pat:"VCP",q:"Strong Buy (4.51)",qr:"Strong Buy",pe:"8.6",rr:1.30,sc:82,tp:154.94,sl:142.39,sh:13,caution:false,note:"Healthy RSI mid-band contraction; 4.6% below 52W high."},
+ {r:4,t:"ABT",n:"Abbott Laboratories",ex:"NYSE",p:95.40,c:3.49,pat:"VCP + Ascending Triangle",q:"Hold (2.77)",qr:"Hold",pe:"17.4",rr:1.14,sc:80,tp:99.42,sl:91.87,sh:20,caution:false,note:"Squeeze breakout above upper band (BBW 0.088); still 31% below 52W high."},
+ {r:5,t:"AFL",n:"Aflac",ex:"NYSE",p:120.88,c:2.02,pat:"VCP + Ascending Triangle",q:"Hold (2.81)",qr:"Hold",pe:"17.2",rr:1.21,sc:78,tp:126.72,sl:116.04,sh:16,caution:true,note:"Closing at a fresh 52W high out of a very tight squeeze (BBW 0.054)."},
+ {r:6,t:"IOT",n:"Samsara",ex:"NYSE",p:35.93,c:5.12,pat:"Ascending Triangle",q:"Buy (3.50)",qr:"Buy",pe:"50.8",rr:2.90,sc:76,tp:47.47,sl:31.96,sh:55,caution:false,note:"Pressing upper band; stop is ~11% below — size accordingly."},
+ {r:7,t:"THC",n:"Tenet Healthcare",ex:"NYSE",p:203.72,c:6.55,pat:"Ascending Triangle",q:"Hold (3.25)",qr:"Hold",pe:"11.4",rr:2.23,sc:74,tp:247.21,sl:184.21,sh:9,caution:true,note:"Strong breakout above upper band; RSI 70.2 slightly hot, EMA50 stop ~10% below."},
+ {r:8,t:"AAPL",n:"Apple",ex:"NASDAQ",p:308.63,c:4.84,pat:"VCP + Ascending Triangle",q:"Hold (3.48)",qr:"Hold",pe:"35.3",rr:1.04,sc:72,tp:327.46,sl:290.59,sh:6,caution:true,note:"Textbook squeeze near highs, but R/R is modest (1.04) and price is within 3% of 52W high."},
+ {r:9,t:"AEP",n:"American Electric Power",ex:"NASDAQ",p:138.51,c:2.56,pat:"VCP + Ascending Triangle",q:"Buy (4.12)",qr:"Buy",pe:"21.8",rr:1.22,sc:72,tp:147.06,sl:131.48,sh:14,caution:true,note:"Utility (beta below guideline); within 1% of 52W high."},
+ {r:10,t:"ADP",n:"Automatic Data Processing",ex:"NASDAQ",p:242.27,c:2.77,pat:"Ascending Triangle",q:"Hold (3.33)",qr:"Hold",pe:"21.9",rr:3.47,sc:70,tp:315.98,sl:221.04,sh:8,caution:false,note:"TP = 52W high is 30% above (BB target gave R/R<1); stop ~9% below."},
+ {r:11,t:"QTWO",n:"Q2 Holdings",ex:"NYSE",p:52.63,c:4.84,pat:"Ascending Triangle",q:"Hold (2.50)",qr:"Hold",pe:"19.0",rr:7.87,sc:68,tp:95.10,sl:47.23,sh:38,caution:false,note:"TP = 52W high sits ~80% above — distant target, treat the high R/R with skepticism."},
+ {r:12,t:"PAY",n:"Paymentus",ex:"NYSE",p:27.06,c:6.49,pat:"Ascending Triangle",q:"Buy (4.00)",qr:"Buy",pe:"32.8",rr:3.61,sc:65,tp:39.38,sl:23.65,sh:73,caution:true,note:"RSI 71 hot; BB-based target already below price so TP = 52W high (distant)."},
+ {r:13,t:"GKOS",n:"Glaukos",ex:"NYSE",p:148.34,c:7.83,pat:"Ascending Triangle",q:"Strong Buy (4.76)",qr:"Strong Buy",pe:"NM",rr:0.36,sc:58,tp:155.55,sl:128.44,sh:13,caution:true,note:"R/R below 1 — very extended above EMA50 and sitting at the 52W high. Watch, don't chase. Fwd P/E NM — pre-profitability."},
+ {r:14,t:"AFG",n:"American Financial Group",ex:"NYSE",p:142.75,c:1.44,pat:"Ascending Triangle",q:"Hold (3.24)",qr:"Hold",pe:"12.3",rr:0.84,sc:55,tp:150.02,sl:134.13,sh:14,caution:true,note:"R/R below 1 with RSI 71 — EMA50 stop is wide relative to both targets. Monitor only."},
+ {r:15,t:"MNTN",n:"MNTN Inc",ex:"NYSE",p:11.15,c:2.76,pat:"Ascending Triangle",q:"Buy (4.00)",qr:"Buy",pe:"12.2",rr:10.58,sc:52,tp:32.00,sl:9.18,sh:179,caution:false,note:"Market cap ~$1.3B (below $3B guideline); TP = 52W high is far above — R/R figure not meaningful."}
+];
+const PATC = {"VCP":"#7c3aed","Ascending Triangle":"#2563eb","VCP + Ascending Triangle":"#db2777"};
+const QC = {"Strong Buy":"#15803d","Buy":"#16a34a","Hold":"#ca8a04","Sell":"#dc2626","Strong Sell":"#991b1b"};
+const rrc = r => r>=1.8 ? "#16a34a" : r>=1.4 ? "#2563eb" : "#6b7280";
+const fmt = v => "$"+v.toFixed(2);
+
+function render() {
+  document.getElementById("rows").innerHTML = PICKS.map(s => {
+    const pc = PATC[s.pat]||"#6b7280", qc = QC[s.qr]||"#6b7280";
+    const chg = s.c>=0 ? "+"+s.c.toFixed(2)+"%" : s.c.toFixed(2)+"%";
+    const tv = `https://www.tradingview.com/chart/?symbol=${s.ex}%3A${s.t}`;
+    const sa = `https://seekingalpha.com/symbol/${s.t}`;
+    const qr = sa + "/ratings/quant-ratings";
+    return `<tr>
+      <td class="l tick">${s.t}${s.caution?"  ⚠":""}</td>
+      <td class="name">${s.n}</td>
+      <td id="p-${s.t}">${fmt(s.p)}</td>
+      <td id="c-${s.t}" class="${s.c>=0?"up":"dn"}">${chg}</td>
+      <td class="c"><span class="pat" style="background:${pc}18;color:${pc};">${s.pat}</span></td>
+      <td class="c"><a class="qlink" style="color:${qc};" href="${qr}" target="_blank">${s.q}</a></td>
+      <td>${s.pe}</td>
+      <td style="font-weight:600;color:${rrc(s.rr)};">${s.rr.toFixed(2)}:1</td>
+      <td>${s.sc}</td>
+      <td class="tpsl"><span class="up">${fmt(s.tp)}</span> / <span class="dn">${fmt(s.sl)}</span><br><span style="color:#6b7280;">${s.sh} sh @ ${fmt(s.p)}</span></td>
+      <td class="c"><a class="btn" style="background:#2962ff;" href="${tv}" target="_blank">TradingView</a><a class="btn" style="background:#ff6600;" href="${sa}" target="_blank">SA</a></td>
+    </tr>
+    <tr class="note"><td colspan="11">${s.note}</td></tr>`;
+  }).join("");
+}
+
+async function refresh() {
+  const st = document.getElementById("status");
+  if (!window.cowork || !window.cowork.callMcpTool) { st.textContent = "Live refresh unavailable — showing July 2 close."; return; }
+  let ok = 0;
+  for (const s of PICKS) {
+    try {
+      const r = await window.cowork.callMcpTool("mcp__tradingview__yahoo_price", { symbol: s.t });
+      let d = r.structuredContent;
+      if (!d && r.content && r.content[0] && r.content[0].text) { try { d = JSON.parse(r.content[0].text); } catch(e){} }
+      if (d && typeof d.price === "number") {
+        const pe = document.getElementById("p-"+s.t), ce = document.getElementById("c-"+s.t);
+        pe.textContent = fmt(d.price);
+        if (typeof d.change_pct === "number") {
+          ce.textContent = (d.change_pct>=0?"+":"")+d.change_pct.toFixed(2)+"%";
+          ce.className = d.change_pct>=0 ? "up" : "dn";
+        }
+        ok++;
+      }
+    } catch(e) { /* keep snapshot value */ }
+    st.textContent = `Refreshing live prices… ${ok}/${PICKS.length}`;
+  }
+  st.textContent = ok > 0 ? `Live prices updated (${ok}/${PICKS.length}) · ${new Date().toLocaleString()}` : "Live refresh failed — showing July 2 close.";
+}
+
+render();
+refresh();
+</script>
+</body>
+</html>
