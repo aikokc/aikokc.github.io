@@ -125,9 +125,9 @@ function initCharts() {
       if (!e.isIntersecting || e.target.dataset.loaded) return;
       e.target.dataset.loaded = "1";
       obs.unobserve(e.target);
-      const cfg = { symbol: e.target.dataset.sym, width: "100%", height: 180, locale: "en", dateRange: "12M", colorTheme: "light", isTransparent: true, autosize: false, chartOnly: false };
+      const cfg = { symbols: [[e.target.dataset.sym.split(":")[1], e.target.dataset.sym]], chartOnly: false, width: "100%", height: 180, locale: "en", colorTheme: "light", autosize: false, showVolume: false, hideDateRanges: true, hideMarketStatus: true, scalePosition: "right", scaleMode: "Normal", fontSize: "10", noTimeScale: false, valuesTracking: "1", changeMode: "price-and-percent", chartType: "area", lineWidth: 2, dateRanges: ["6m|1D"], dateFormat: "MMM dd" };
       const f = document.createElement("iframe");
-      f.src = "https://www.tradingview-widget.com/embed-widget/mini-symbol-overview/?locale=en#" + encodeURIComponent(JSON.stringify(cfg));
+      f.src = "https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=en#" + encodeURIComponent(JSON.stringify(cfg));
       f.style.cssText = "width:100%;height:180px;border:0;";
       f.loading = "lazy";
       f.title = e.target.dataset.sym + " chart";
