@@ -24,6 +24,8 @@
   .name { color:#6b7280; font-size:12px; text-align:left; }
   .pat { padding:3px 8px; border-radius:12px; font-size:10.5px; font-weight:600; white-space:nowrap; }
   .note td { padding:2px 10px 8px; color:#9ca3af; font-size:11px; font-style:italic; border-bottom:1px solid #f1f5f9; text-align:left; }
+  .chart td { padding:0 10px 12px; border-bottom:1px solid #e5e7eb; }
+  .tvchart { height:190px; }
   .up { color:#16a34a; } .dn { color:#dc2626; }
   .btn { display:inline-block; padding:5px 9px; border-radius:6px; font-size:10.5px; font-weight:700; color:#fff !important; text-decoration:none; white-space:nowrap; margin:1px; }
   .qlink { font-weight:700; text-decoration:none; font-size:12px; white-space:nowrap; }
@@ -37,6 +39,8 @@
     thead { display:none; }
     tr { padding:10px 14px 6px; border-bottom:6px solid #f3f4f6; }
     tr.note { padding:0 14px 12px; border-bottom:6px solid #f3f4f6; }
+    tr.chart { padding:0 14px 12px; border-bottom:6px solid #f3f4f6; }
+    .chart td { display:block; padding:0; }
     td { display:flex; justify-content:space-between; align-items:center; gap:10px; text-align:right; border-bottom:none; padding:3px 0; }
     td::before { content:attr(data-l); color:#9ca3af; font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:.03em; flex-shrink:0; }
     td:not([data-l])::before { content:none; }
@@ -110,8 +114,29 @@ function render() {
       <td class="tpsl" data-l="TP / SL"><span class="up">${fmt(s.tp)}</span> / <span class="dn">${fmt(s.sl)}</span><br><span style="color:#6b7280;">${s.sh} sh @ ${fmt(s.p)}</span></td>
       <td class="c" data-l="Links"><a class="btn" style="background:#2962ff;" href="${tv}" target="_blank">TradingView</a><a class="btn" style="background:#ff6600;" href="${sa}" target="_blank">SA</a></td>
     </tr>
-    <tr class="note"><td colspan="11">${s.note}</td></tr>`;
+    <tr class="note"><td colspan="11">${s.note}</td></tr>
+    <tr class="chart"><td colspan="11"><div class="tvchart" data-sym="${s.ex}:${s.t}"></div></td></tr>`;
   }).join("");
+}
+
+function initCharts() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting || e.target.dataset.loaded) return;
+      e.target.dataset.loaded = "1";
+      obs.unobserve(e.target);
+      const wrap = document.createElement("div");
+      wrap.className = "tradingview-widget-container";
+      wrap.innerHTML = '<div class="tradingview-widget-container__widget"></div>';
+      const scr = document.createElement("script");
+      scr.src = "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
+      scr.async = true;
+      scr.text = JSON.stringify({ symbol: e.target.dataset.sym, width: "100%", height: 180, locale: "en", dateRange: "6M", colorTheme: "light", isTransparent: true, autosize: false, chartOnly: false });
+      wrap.appendChild(scr);
+      e.target.appendChild(wrap);
+    });
+  }, { rootMargin: "300px" });
+  document.querySelectorAll(".tvchart").forEach(el => obs.observe(el));
 }
 
 async function refresh() {
@@ -139,6 +164,7 @@ async function refresh() {
 }
 
 render();
+initCharts();
 refresh();
 </script>
 </body>
