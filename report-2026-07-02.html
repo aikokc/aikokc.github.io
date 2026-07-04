@@ -53,14 +53,14 @@
 <div class="card">
   <div class="hdr">
     <h1>📈 Daily Stock Screener</h1>
-    <p>VCP &amp; Ascending Triangle · Screened July 2, 2026 (close) · SA Quant &amp; Fwd P/E from Seeking Alpha Premium</p>
+    <p>VCP &amp; Ascending Triangle · Screened July 2, 2026 (close) · Q = SA Quant rating · Fwd P/E (Non-GAAP) from Seeking Alpha Premium</p>
   </div>
   <div class="sub">15 picks · ⚠ = caution (RSI&gt;70 or near 52W high) · <span id="status">Refreshing live prices…</span> · <a href="archive.html" style="color:#2563eb;text-decoration:none;font-weight:600;">📁 Archive</a></div>
   <div style="overflow-x:auto;">
   <table id="tbl">
     <thead><tr>
-      <th>Ticker</th><th>Name</th><th>Price</th><th>Chg</th><th>Pattern</th><th>SA Quant</th>
-      <th>Fwd P/E</th><th>R/R</th><th>Score</th><th>TP / SL · Position</th><th>Links</th>
+      <th>Ticker</th><th>Name</th><th>Price</th><th>Chg</th><th>Pattern</th>
+      <th>Q</th><th>Fwd P/E</th><th>R/R</th><th>Score</th><th>TP / SL · Position</th><th>Links</th>
     </tr></thead>
     <tbody id="rows"></tbody>
   </table>
@@ -103,7 +103,7 @@ function render() {
       <td id="p-${s.t}" data-l="Price">${fmt(s.p)}</td>
       <td id="c-${s.t}" data-l="1D Change" class="${s.c>=0?"up":"dn"}">${chg}</td>
       <td class="c" data-l="Pattern"><span class="pat" style="background:${pc}18;color:${pc};">${s.pat}</span></td>
-      <td class="c" data-l="SA Quant"><a class="qlink" style="color:${qc};" href="${qr}" target="_blank">${s.q}</a></td>
+      <td class="c" data-l="Q"><a class="qlink" style="color:${qc};" href="${qr}" target="_blank">${s.q}</a></td>
       <td data-l="Fwd P/E">${s.pe}</td>
       <td data-l="R/R" style="font-weight:600;color:${rrc(s.rr)};">${s.rr.toFixed(2)}:1</td>
       <td data-l="Score">${s.sc}</td>
