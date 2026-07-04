@@ -125,7 +125,7 @@ function initCharts() {
       if (!e.isIntersecting || e.target.dataset.loaded) return;
       e.target.dataset.loaded = "1";
       obs.unobserve(e.target);
-      const cfg = { symbol: e.target.dataset.sym, width: "100%", height: 180, locale: "en", dateRange: "6M", colorTheme: "light", isTransparent: true, autosize: false, chartOnly: false };
+      const cfg = { symbol: e.target.dataset.sym, width: "100%", height: 180, locale: "en", dateRange: "12M", colorTheme: "light", isTransparent: true, autosize: false, chartOnly: false };
       const f = document.createElement("iframe");
       f.src = "https://www.tradingview-widget.com/embed-widget/mini-symbol-overview/?locale=en#" + encodeURIComponent(JSON.stringify(cfg));
       f.style.cssText = "width:100%;height:180px;border:0;";
