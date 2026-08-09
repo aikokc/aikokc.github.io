@@ -53,9 +53,9 @@
 <div class="card">
   <div class="hdr">
     <h1>📈 Daily Stock Screener</h1>
-    <p>VCP &amp; Ascending Triangle · Screened August 5, 2026 (close)</p>
+    <p>Momentum Swing (Qullamaggie) · Screened August 7, 2026 (close)</p>
   </div>
-  <div class="sub">15 picks · ⚠ = caution (RSI&gt;70 or near 52W high) · <span id="status">Refreshing live prices…</span> · <a href="archive.html" style="color:#2563eb;text-decoration:none;font-weight:600;">📁 Archive</a></div>
+  <div class="sub">14 picks · ⚠ = caution (very extended / climax risk) · <span id="status">Refreshing live prices…</span> · <a href="archive.html" style="color:#2563eb;text-decoration:none;font-weight:600;">📁 Archive</a></div>
   <div style="overflow-x:auto;">
   <table id="tbl">
     <thead><tr>
@@ -65,27 +65,26 @@
     <tbody id="rows"></tbody>
   </table>
   </div>
-  <div class="ftr">Prices refresh each time this page opens (TradingView/Yahoo). Quant, Fwd P/E, patterns, and targets are a snapshot from the August 5, 2026 screen. Informational only — not investment advice.</div>
+  <div class="ftr">Prices refresh each time this page opens (TradingView/Yahoo). Quant, Fwd P/E, patterns, and targets are a snapshot from the August 7, 2026 screen. Informational only — not investment advice.</div>
 </div>
 <script>
 const PICKS = [
- {r:1,t:"AIG",n:"American International Group",ex:"NYSE",p:80.12,c:1.69,pat:"VCP + Ascending Triangle",q:"Hold (3.36)",qr:"Hold",pe:"9.94",rr:2.31,sc:100,tp:85.15,sl:77.94,sh:24,caution:false,note:"Tight squeeze (BBW 0.048) breaking above the upper band with a healthy RSI 56; about 8% below the 52W high."},
- {r:2,t:"A",n:"Agilent Technologies",ex:"NYSE",p:141.11,c:1.37,pat:"VCP + Ascending Triangle",q:"Hold (3.36)",qr:"Hold",pe:"22.97",rr:1.03,sc:93,tp:150.08,sl:132.42,sh:14,caution:false,note:"VCP contraction reclaiming the 20-day, RSI 63 — but the BB-based target sits close, so R/R is a slim 1.03."},
- {r:3,t:"MOS",n:"The Mosaic Company",ex:"NYSE",p:23.41,c:7.34,pat:"VCP",q:"Hold (2.69)",qr:"Hold",pe:"30.24",rr:1.42,sc:88,tp:24.74,sl:22.47,sh:85,caution:false,note:"Fertilizer name popping +7% out of a tight band; RSI 58, clean R/R 1.4 and well off its 52W high."},
- {r:4,t:"AFL",n:"Aflac",ex:"NYSE",p:125.56,c:-0.91,pat:"VCP",q:"Hold (2.91)",qr:"Hold",pe:"17.83",rr:1.11,sc:87,tp:130.22,sl:121.35,sh:15,caution:false,note:"Very tight squeeze (BBW 0.074) just under a fresh 52W high; RSI 57, R/R a modest 1.11."},
- {r:5,t:"ABNB",n:"Airbnb",ex:"NASDAQ",p:152.49,c:1.23,pat:"VCP",q:"Hold (3.24)",qr:"Hold",pe:"29.41",rr:1.28,sc:78,tp:163.68,sl:143.76,sh:13,caution:true,note:"Textbook squeeze pressing the 52W high (156.50); RSI 60 but price is within 3% of the high — caution."},
- {r:6,t:"ACIW",n:"ACI Worldwide",ex:"NASDAQ",p:57.79,c:1.03,pat:"VCP",q:"Hold (3.03)",qr:"Hold",pe:"16.27",rr:0.94,sc:77,tp:63.0,sl:52.26,sh:34,caution:false,note:"Clean VCP, RSI 60 — but the BB-based target leaves R/R just under 1 with the EMA50 stop ~10% below."},
- {r:7,t:"AFG",n:"American Financial Group",ex:"NYSE",p:146.73,c:4.36,pat:"VCP + Ascending Triangle",q:"Hold (3.17)",qr:"Hold",pe:"12.12",rr:0.83,sc:76,tp:153.11,sl:139.01,sh:13,caution:true,note:"Squeeze breakout at a fresh 52W high; RSI 64 but R/R below 1 — the EMA50 stop is wide. Monitor."},
- {r:8,t:"ENR",n:"Energizer Holdings",ex:"NYSE",p:22.53,c:4.4,pat:"Momentum breakout",q:"Buy (3.84)",qr:"Buy",pe:"6.53",rr:3.85,sc:76,tp:30.29,sl:20.51,sh:88,caution:false,note:"+4% with a BUY quant (3.84) and a cheap 6.5x fwd P/E; TP = 52W high gives a strong R/R 3.9."},
- {r:9,t:"EGO",n:"Eldorado Gold",ex:"NYSE",p:36.0,c:13.14,pat:"Momentum breakout",q:"Hold (2.89)",qr:"Hold",pe:"9.09",rr:3.57,sc:75,tp:51.16,sl:31.76,sh:55,caution:false,note:"Gold miner surging +13%; RSI 65, 52W-high target ~42% above yields a high R/R — momentum, size small."},
- {r:10,t:"ACA",n:"Arcosa",ex:"NYSE",p:145.32,c:0.07,pat:"Ascending Triangle",q:"Hold (2.94)",qr:"Hold",pe:"33.13",rr:1.16,sc:73,tp:152.71,sl:138.97,sh:13,caution:true,note:"Extremely tight band (BBW 0.005) sitting at the 52W high; RSI 66 and within 3% of the high — caution."},
- {r:11,t:"AGL",n:"agilon health",ex:"NYSE",p:107.85,c:14.6,pat:"Momentum breakout",q:"Hold (3.49)",qr:"Hold",pe:"NM",rr:2.58,sc:73,tp:133.04,sl:98.07,sh:18,caution:false,note:"+15% but off a very low base (52W low 7.48) and pre-profit (fwd P/E NM). Speculative momentum."},
- {r:12,t:"CMPS",n:"COMPASS Pathways",ex:"NASDAQ",p:13.58,c:20.71,pat:"Momentum breakout",q:"Hold (3.32)",qr:"Hold",pe:"NM",rr:1.05,sc:68,tp:15.4,sl:11.84,sh:147,caution:false,note:"Biotech +21% breakout; pre-profit (fwd P/E NM), RSI 62. High-volatility momentum only."},
- {r:13,t:"EQH",n:"Equitable Holdings",ex:"NYSE",p:51.3,c:6.32,pat:"Ascending Triangle",q:"Hold (2.95)",qr:"Hold",pe:"6.75",rr:0.76,sc:67,tp:55.24,sl:46.11,sh:38,caution:false,note:"Pressing the upper band with a cheap 6.8x fwd P/E, but the BB target is below price so TP = 52W high and R/R is under 1."},
- {r:14,t:"SKY",n:"Champion Homes",ex:"NYSE",p:91.16,c:10.68,pat:"Ascending Triangle",q:"Hold (2.75)",qr:"Hold",pe:"24.24",rr:0.79,sc:64,tp:99.17,sl:81.08,sh:21,caution:false,note:"+11% toward its 52W high; RSI 67, TP = 52W high leaves R/R under 1."},
- {r:15,t:"CRBG",n:"Corebridge Financial",ex:"NYSE",p:33.59,c:7.28,pat:"Ascending Triangle",q:"Hold (2.93)",qr:"Hold",pe:"7.08",rr:0.45,sc:64,tp:35.22,sl:30.0,sh:59,caution:false,note:"Near a fresh 52W high with a cheap 7x fwd P/E; RSI 69 and TP only ~5% above — R/R under 1, watch don't chase."}
+ {r:1,t:"A",n:"Agilent Technologies",ex:"NYSE",p:145.97,c:3.28,pat:"Breakout",q:"Hold (3.35)",qr:"Hold",pe:"24.09",rr:2.63,sc:88,tp:168.28,sl:137.48,sh:13,caution:false,note:"Breakout above the upper band from a multi-week base, ~9% below the 52W high. Trail the 10/20-day MA and sell partials into strength."},
+ {r:2,t:"HNGE",n:"Hinge Health",ex:"NYSE",p:89.33,c:11.55,pat:"Breakout",q:"Strong Buy (4.87)",qr:"Strong Buy",pe:"36.60",rr:1.71,sc:86,tp:101.56,sl:82.18,sh:22,caution:false,note:"Stacked 10/20/50 rising into a new-high breakout; SA Quant Strong Buy. Trail the 10/20-day MA."},
+ {r:3,t:"ADI",n:"Analog Devices",ex:"NASDAQ",p:389.93,c:3.34,pat:"Momentum (base building)",q:"Hold (3.45)",qr:"Hold",pe:"31.36",rr:5.87,sc:85,tp:468.21,sl:376.60,sh:5,caution:false,note:"Mega-cap leader riding rising MAs ~13% below the 52W high, basing between clean setups. Trail the 20-day MA."},
+ {r:4,t:"HALO",n:"Halozyme Therapeutics",ex:"NASDAQ",p:103.12,c:20.24,pat:"Episodic Pivot",q:"Hold (2.97)",qr:"Hold",pe:"12.02",rr:0.52,sc:84,tp:108.47,sl:92.81,sh:19,caution:true,note:"Earnings-gap Episodic Pivot to a fresh 52W high; RSI 87 very extended. R/R below 1.5 - manage by trailing the 10/20-day MA, do not chase."},
+ {r:5,t:"ERO",n:"Ero Copper",ex:"NYSE",p:34.31,c:10.32,pat:"Breakout + Episodic Pivot",q:"Buy (3.98)",qr:"Buy",pe:"8.53",rr:2.73,sc:82,tp:41.79,sl:31.57,sh:58,caution:true,note:"Copper leader breaking above the upper band, +156% off the lows but extended above the 20-day MA. Trail the 10/20-day MA."},
+ {r:6,t:"FIVN",n:"Five9",ex:"NASDAQ",p:33.99,c:19.81,pat:"Episodic Pivot",q:"Hold (3.36)",qr:"Hold",pe:"10.44",rr:0.54,sc:80,tp:35.81,sl:30.59,sh:58,caution:true,note:"Earnings-gap EP to a new high with stacked MAs. R/R below 1.5 - manage by trailing the 10/20-day MA and selling partials into strength."},
+ {r:7,t:"TXG",n:"10x Genomics",ex:"NASDAQ",p:52.03,c:14.10,pat:"Episodic Pivot",q:"Hold (3.49)",qr:"Hold",pe:"NM",rr:0.74,sc:78,tp:55.87,sl:46.83,sh:38,caution:false,note:"Episodic Pivot to a fresh 52W high; Fwd P/E NM (pre-profitability). R/R below 1.5 - manage by trailing the 10/20-day MA."},
+ {r:8,t:"IONQ",n:"IonQ",ex:"NYSE",p:44.43,c:11.86,pat:"Breakout",q:"Sell (1.59)",qr:"Sell",pe:"NM",rr:12.52,sc:75,tp:88.87,sl:40.88,sh:45,caution:false,note:"Breakout above the upper band but still ~47% below the 52W high; SA Quant Sell - momentum trade only. Fwd P/E NM. Trail the 10/20-day MA."},
+ {r:9,t:"VOYG",n:"Voyager Technologies",ex:"NYSE",p:41.85,c:9.24,pat:"Momentum (base building)",q:"Hold (2.82)",qr:"Hold",pe:"NM",rr:3.93,sc:74,tp:55.02,sl:38.50,sh:47,caution:true,note:"Space/defense momentum leader, extended above the 20-day MA; Fwd P/E NM. Trail the 10/20-day MA."},
+ {r:10,t:"SVV",n:"Savers Value Village",ex:"NYSE",p:12.22,c:12.01,pat:"Breakout",q:"Hold (2.85)",qr:"Hold",pe:"24.57",rr:2.41,sc:72,tp:14.58,sl:11.24,sh:163,caution:true,note:"Range breakout, +77% off the lows but extended above the 20-day MA. Trail the 10/20-day MA."},
+ {r:11,t:"TNDM",n:"Tandem Diabetes Care",ex:"NASDAQ",p:22.38,c:19.11,pat:"Episodic Pivot",q:"Buy (3.59)",qr:"Buy",pe:"NM",rr:3.91,sc:71,tp:31.13,sl:20.14,sh:89,caution:true,note:"Earnings-gap EP near the 52W high with stacked MAs but extended; Fwd P/E NM. Trail the 10/20-day MA, sell partials into strength."},
+ {r:12,t:"AMN",n:"AMN Healthcare",ex:"NYSE",p:36.00,c:16.88,pat:"Episodic Pivot",q:"Hold (3.47)",qr:"Hold",pe:"10.93",rr:1.49,sc:70,tp:39.49,sl:33.66,sh:55,caution:false,note:"Episodic Pivot to a fresh 52W high, stacked MAs; R/R ~1.5 - manage by trailing the 10/20-day MA."},
+ {r:13,t:"MTW",n:"Manitowoc",ex:"NYSE",p:18.81,c:32.37,pat:"Episodic Pivot",q:"Buy (4.00)",qr:"Buy",pe:"27.58",rr:1.05,sc:64,tp:20.79,sl:16.93,sh:106,caution:true,note:"+32% earnings gap (chase risk) with RSI 81. R/R below 1.5 - manage by trailing the 10/20-day MA, do not chase the gap."},
+ {r:14,t:"RDW",n:"Redwire",ex:"NYSE",p:13.59,c:14.88,pat:"Episodic Pivot",q:"Hold (2.90)",qr:"Hold",pe:"NM",rr:10.57,sc:62,tp:27.97,sl:12.23,sh:147,caution:true,note:"Space EP, still ~49% below the 52W high - a momentum reset, not yet a leader near highs; Fwd P/E NM. Trail the 10/20-day MA."}
 ];
-const PATC = {"VCP":"#7c3aed","Ascending Triangle":"#2563eb","VCP + Ascending Triangle":"#db2777"};
+const PATC = {"Bull Flag":"#7c3aed","Breakout":"#2563eb","Episodic Pivot":"#db2777","Breakout + Episodic Pivot":"#9333ea","Momentum (base building)":"#0891b2"};
 const QC = {"Strong Buy":"#15803d","Buy":"#16a34a","Hold":"#ca8a04","Sell":"#dc2626","Strong Sell":"#991b1b"};
 const rrc = r => r>=1.8 ? "#16a34a" : r>=1.4 ? "#2563eb" : "#6b7280";
 const fmt = v => "$"+v.toFixed(2);
@@ -116,7 +115,7 @@ function render() {
 
 async function refresh() {
   const st = document.getElementById("status");
-  if (!window.cowork || !window.cowork.callMcpTool) { st.textContent = "Live refresh unavailable — showing August 5, 2026 close."; return; }
+  if (!window.cowork || !window.cowork.callMcpTool) { st.textContent = "Live refresh unavailable — showing August 7 close."; return; }
   let ok = 0;
   for (const s of PICKS) {
     try {
@@ -135,7 +134,7 @@ async function refresh() {
     } catch(e) { /* keep snapshot value */ }
     st.textContent = `Refreshing live prices… ${ok}/${PICKS.length}`;
   }
-  st.textContent = ok > 0 ? `Live prices updated (${ok}/${PICKS.length}) · ${new Date().toLocaleString()}` : "Live refresh failed — showing August 5, 2026 close.";
+  st.textContent = ok > 0 ? `Live prices updated (${ok}/${PICKS.length}) · ${new Date().toLocaleString()}` : "Live refresh failed — showing August 7 close.";
 }
 
 render();
