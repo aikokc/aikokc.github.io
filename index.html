@@ -16,8 +16,8 @@
   #status { font-weight:600; color:#6b7280; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
   th { padding:8px 10px; font-size:10px; color:#6b7280; text-transform:uppercase; border-bottom:1px solid #e5e7eb; background:#f9fafb; text-align:right; }
-  th:nth-child(1), th:nth-child(2), th:nth-child(3), th:nth-child(11) { text-align:left; }
-  th:nth-child(6), th:nth-child(7), th:nth-child(12) { text-align:center; }
+  th:nth-child(1), th:nth-child(2), th:nth-child(10) { text-align:left; }
+  th:nth-child(5), th:nth-child(6), th:nth-child(11) { text-align:center; }
   td { padding:9px 10px; border-bottom:1px solid #e5e7eb; text-align:right; }
   td.l { text-align:left; } td.c { text-align:center; }
   .tick { font-weight:700; }
@@ -47,47 +47,40 @@
     td.c[data-l="Links"] { justify-content:flex-end; }
   }
 
-  .sec { font-size:11.5px; font-weight:600; white-space:nowrap; }
-  .secbar { padding:8px 24px; background:#fff; border-bottom:1px solid #e5e7eb; font-size:11.5px; color:#6b7280; }
-  .secbar b { color:#374151; }
 </style>
 </head>
 <body>
 <div class="card">
   <div class="hdr">
     <h1>📈 Daily Stock Screener</h1>
-    <p>Qullamaggie Momentum · Screened August 12, 2026 (close)</p>
+    <p>Qullamaggie Momentum · Screened August 14, 2026 (close)</p>
   </div>
-  <div class="sub">12 picks · ⚠ = caution (very extended / climax risk) · <span id="status">Refreshing live prices…</span> · <a href="archive.html" style="color:#2563eb;text-decoration:none;font-weight:600;">📁 Archive</a></div>
-  <div class="secbar">By sector: <b>Health Care</b> 6 · <b>Technology</b> 3 · <b>Industrials</b> 3 · <b>Materials</b> 1 · <b>Consumer Discretionary</b> 1</div>
+  <div class="sub">10 picks · ⚠ = caution (very extended / climax risk) · <span id="status">Refreshing live prices…</span> · <a href="archive.html" style="color:#2563eb;text-decoration:none;font-weight:600;">📁 Archive</a></div>
   <div style="overflow-x:auto;">
   <table id="tbl">
     <thead><tr>
-      <th>Ticker</th><th>Name</th><th>Sector</th><th>Price</th><th>Chg</th><th>Pattern</th>
+      <th>Ticker</th><th>Name</th><th>Price</th><th>Chg</th><th>Pattern</th>
       <th>Q</th><th>Fwd P/E</th><th>R/R</th><th>Score</th><th>TP / SL · Position</th><th>Links</th>
     </tr></thead>
     <tbody id="rows"></tbody>
   </table>
   </div>
-  <div class="ftr">Prices refresh each time this page opens (TradingView/Yahoo). Patterns, targets, and Fwd P/E are a snapshot from the August 12, 2026 screen (Qullamaggie momentum method). Quant ratings unavailable this run (browser not connected). Informational only — not investment advice.</div>
+  <div class="ftr">Prices refresh each time this page opens (TradingView/Yahoo). Quant, Fwd P/E, patterns, and targets are a snapshot from the August 14, 2026 screen. Informational only — not investment advice.</div>
 </div>
 <script>
 const PICKS = [
- {r:1,t:"DELL",n:"Dell Technologies",ex:"NYSE",p:484.50,c:9.87,pat:"Breakout",q:"n/a",qr:"n/a",pe:"25.1",rr:1.34,sc:90,tp:536.49,sl:445.74,sh:4,caution:false,note:"Breakout to fresh 52W highs on a 9.9% thrust with RSI 61 (not extended) and heavy volume. R/R below 1.5 — manage by trailing the 10/20-day MA; sell partials into strength."},
- {r:2,t:"HPE",n:"Hewlett Packard Enterprise",ex:"NYSE",p:58.79,c:8.11,pat:"Breakout + Episodic Pivot",q:"n/a",qr:"n/a",pe:"12.8",rr:1.84,sc:89,tp:67.46,sl:54.09,sh:34,caution:false,note:"Range breakout on an 8% gap, closing above the upper band ~8% below the 52W high. Trail the 10/20-day MA and sell partials into strength."},
- {r:3,t:"NBIS",n:"Nebius Group",ex:"NASDAQ",p:259.20,c:34.14,pat:"Episodic Pivot",q:"n/a",qr:"n/a",pe:"68.5",rr:2.15,sc:88,tp:314.85,sl:233.28,sh:7,caution:true,note:"Massive 34% catalyst gap into new-high territory — powerful but very extended (~32% above the 20-MA), so chase risk is high. Use the tight 10% stop, trail the 10/20-day MA, sell partials into strength."},
- {r:4,t:"MRX",n:"Marex Group",ex:"NASDAQ",p:71.13,c:18.69,pat:"Episodic Pivot + Breakout",q:"n/a",qr:"n/a",pe:"13.1",rr:0.63,sc:85,tp:75.60,sl:64.02,sh:28,caution:false,note:"18.7% gap breakout to a fresh 52W high on strong volume. R/R below 1.5 (price already near projected target) — manage by trailing the 10/20-day MA; sell partials into strength."},
- {r:5,t:"DK",n:"Delek US Holdings",ex:"NYSE",p:67.22,c:5.13,pat:"Breakout",q:"n/a",qr:"n/a",pe:"9.0",rr:2.90,sc:83,tp:76.61,sl:63.98,sh:29,caution:false,note:"Clean breakout hugging its 52W high with EMA50 well below (rising, stacked). Trail the 10/20-day MA and sell partials into strength."},
- {r:6,t:"EAT",n:"Brinker International",ex:"NYSE",p:245.89,c:11.07,pat:"Episodic Pivot + Breakout",q:"n/a",qr:"n/a",pe:"12.8",rr:0.90,sc:82,tp:268.06,sl:221.30,sh:8,caution:false,note:"11% gap breakout above the upper band at new highs; RSI 76 is hot and price ~18% above the 20-MA. R/R below 1.5 — manage by trailing the 10/20-day MA; sell partials into strength."},
- {r:7,t:"ABT",n:"Abbott Laboratories",ex:"NYSE",p:110.91,c:1.08,pat:"Breakout",q:"n/a",qr:"n/a",pe:"18.5",rr:5.64,sc:81,tp:144.36,sl:104.98,sh:18,caution:false,note:"Mega-cap breakout from a tight consolidation, pressing the upper band ~19% below the 52W high (long runway). Trail the 10/20-day MA and sell partials into strength."},
- {r:8,t:"CON",n:"Concentra Group Holdings",ex:"NYSE",p:34.54,c:4.57,pat:"Breakout",q:"n/a",qr:"n/a",pe:"15.0",rr:1.20,sc:80,tp:37.58,sl:32.00,sh:57,caution:false,note:"Breakout above the upper band to a fresh 52W high with a tight 20-MA stop. R/R below 1.5 — manage by trailing the 10/20-day MA; sell partials into strength."},
- {r:9,t:"REZI",n:"Resideo Technologies",ex:"NYSE",p:25.71,c:6.06,pat:"Bull Flag",q:"n/a",qr:"n/a",pe:"9.1",rr:8.89,sc:71,tp:33.09,sl:24.88,sh:77,caution:false,note:"Tight flag hugging the rising 20-MA, stacked above EMA50, ~18% below the 52W high. Trail the 10/20-day MA and sell partials into strength."},
- {r:10,t:"HUM",n:"Humana",ex:"NYSE",p:388.83,c:4.29,pat:"Momentum (base building)",q:"n/a",qr:"n/a",pe:"29.6",rr:8.77,sc:69,tp:450.32,sl:381.82,sh:5,caution:false,note:"Large-cap leader riding above stacked MAs near its highs but between clean setups; 20-MA stop is close. Trail the 10/20-day MA and sell partials into strength."},
- {r:11,t:"OSCR",n:"Oscar Health",ex:"NYSE",p:29.61,c:5.86,pat:"Momentum (base building)",q:"n/a",qr:"n/a",pe:"25.0",rr:31.72,sc:68,tp:35.32,sl:29.43,sh:67,caution:false,note:"Riding right along the 20-MA in a rising trend; stop sits just under price so R/R is inflated. Trail the 10/20-day MA and sell partials into strength."},
- {r:12,t:"AJG",n:"Arthur J. Gallagher",ex:"NYSE",p:255.46,c:0.77,pat:"Momentum (base building)",q:"n/a",qr:"n/a",pe:"15.5",rr:23.27,sc:66,tp:329.23,sl:252.29,sh:7,caution:false,note:"Steady large-cap leader above stacked MAs, ~18% below the 52W high but between clean setups; wide target inflates R/R. Trail the 10/20-day MA and sell partials into strength."}
+ {r:1,t:"OSCR",n:"Oscar Health",ex:"NYSE",p:32.76,c:6.43,pat:"Breakout",q:"Strong Buy (4.94)",qr:"Strong Buy",pe:"18.71",rr:1.26,sc:90,tp:36.05,sl:30.14,sh:61,caution:false,note:"Breakout at a fresh 52W high out of a multi-week base; 10/20/50 MAs stacked and rising. R/R below 1.5 — manage by trailing the 10/20-day MA and sell partials into strength."},
+ {r:2,t:"ADI",n:"Analog Devices",ex:"NASDAQ",p:389.39,c:2.16,pat:"Bull Flag",q:"Hold (3.43)",qr:"Hold",pe:"31.32",rr:6.13,sc:88,tp:468.21,sl:376.53,sh:5,caution:false,note:"Textbook tight flag (BBW ~0.10) hugging the 20-MA, within 13% of the 52W high. Trail the 10/20-day MA; sell partials into strength."},
+ {r:3,t:"AAOI",n:"Applied Optoelectronics",ex:"NASDAQ",p:150.28,c:15.53,pat:"Episodic Pivot",q:"Buy (3.85)",qr:"Buy",pe:"221.00",rr:6.33,sc:85,tp:245.35,sl:135.25,sh:13,caution:true,note:"+15.5% catalyst gap on heavy volume — powerful EP. Extended >20% above the 20-MA (climax risk); keep the stop tight and trail the 10/20-day MA, sell partials into strength."},
+ {r:4,t:"VIRT",n:"Virtu Financial",ex:"NYSE",p:60.02,c:4.93,pat:"Bull Flag + Breakout",q:"Strong Buy (4.54)",qr:"Strong Buy",pe:"8.22",rr:5.30,sc:84,tp:71.42,sl:57.87,sh:33,caution:false,note:"Tight flag hugging the 20-MA and pressing the upper band, within 12% of the 52W high. Trail the 10/20-day MA; sell partials into strength."},
+ {r:5,t:"ABT",n:"Abbott Laboratories",ex:"NYSE",p:111.25,c:-0.02,pat:"Bull Flag",q:"Hold (3.35)",qr:"Hold",pe:"20.16",rr:6.47,sc:78,tp:144.36,sl:106.13,sh:17,caution:false,note:"Mega-cap tight consolidation above rising 10/20/50 MAs (RSI ~73). Trail the 10/20-day MA; sell partials into strength."},
+ {r:6,t:"MP",n:"MP Materials",ex:"NYSE",p:58.74,c:5.53,pat:"Breakout",q:"Sell (1.70)",qr:"Sell",pe:"NM",rr:9.90,sc:72,tp:105.26,sl:54.04,sh:34,caution:true,note:"Thrust above the upper band from a multi-week base, but ~41% below the 52W high (TP distant, R/R inflated) and >20% above the 20-MA (climax risk). Weak SA quant. Trail the 10/20-day MA."},
+ {r:7,t:"KGS",n:"Kodiak Gas Services",ex:"NYSE",p:65.35,c:4.74,pat:"Momentum (base building)",q:"Hold (3.07)",qr:"Hold",pe:"25.72",rr:3.47,sc:66,tp:81.56,sl:60.68,sh:30,caution:false,note:"Leader within 16% of the 52W high on rising stacked MAs, but not yet a tight flag — wait for a proper setup. Trail the 10/20-day MA."},
+ {r:8,t:"SEI",n:"Solaris Energy Infrastructure",ex:"NYSE",p:63.30,c:5.68,pat:"Momentum (base building)",q:"Sell (2.00)",qr:"Sell",pe:"62.57",rr:5.38,sc:58,tp:90.50,sl:58.24,sh:31,caution:false,note:"Borderline leadership (~27% below the 52W high) on a wide base; weak SA quant. Watch for a tighter setup. Trail the 10/20-day MA."},
+ {r:9,t:"NMAX",n:"Newsmax",ex:"NYSE",p:10.87,c:14.54,pat:"Episodic Pivot",q:"Hold (2.84)",qr:"Hold",pe:"NM",rr:5.39,sc:55,tp:16.74,sl:9.78,sh:183,caution:true,note:"+14.5% catalyst gap, but RSI ~78 and >20% above the 20-MA (chase risk); small cap (~$1.4B, below the $3B preference). Trail the 10/20-day MA."},
+ {r:10,t:"METC",n:"Ramaco Resources",ex:"NASDAQ",p:12.25,c:16.33,pat:"Episodic Pivot",q:"Strong Sell (1.14)",qr:"Strong Sell",pe:"NM",rr:39.70,sc:48,tp:60.69,sl:11.03,sh:163,caution:false,note:"+16% catalyst gap; small cap and ~79% below the 52W high, so TP is far away and the R/R figure is not meaningful. Weak SA quant. Trail the 10/20-day MA."}
 ];
-const PATC = {"Bull Flag":"#7c3aed","Breakout":"#2563eb","Episodic Pivot":"#db2777","Breakout + Episodic Pivot":"#c026d3","Episodic Pivot + Breakout":"#c026d3","Momentum (base building)":"#6b7280"};
-const SECC = {"Health Care":"#0d9488","Technology":"#2563eb","Industrials":"#b45309","Materials":"#65a30d","Consumer Discretionary":"#9333ea"};
+const PATC = {"Bull Flag":"#7c3aed","Breakout":"#2563eb","Episodic Pivot":"#db2777","Bull Flag + Breakout":"#0891b2","Momentum (base building)":"#6b7280"};
 const QC = {"Strong Buy":"#15803d","Buy":"#16a34a","Hold":"#ca8a04","Sell":"#dc2626","Strong Sell":"#991b1b"};
 const rrc = r => r>=1.8 ? "#16a34a" : r>=1.4 ? "#2563eb" : "#6b7280";
 const fmt = v => "$"+v.toFixed(2);
@@ -102,7 +95,6 @@ function render() {
     return `<tr>
       <td class="l tick">${s.t}${s.caution?"  ⚠":""}</td>
       <td class="name">${s.n}</td>
-      <td class="l" data-l="Sector"><span class="sec" style="color:${SECC[s.sec]||'#6b7280'};">${s.sec}</span></td>
       <td id="p-${s.t}" data-l="Price">${fmt(s.p)}</td>
       <td id="c-${s.t}" data-l="1D Change" class="${s.c>=0?"up":"dn"}">${chg}</td>
       <td class="c" data-l="Pattern"><span class="pat" style="background:${pc}18;color:${pc};">${s.pat}</span></td>
@@ -113,13 +105,13 @@ function render() {
       <td class="tpsl" data-l="TP / SL"><span class="up">${fmt(s.tp)}</span> / <span class="dn">${fmt(s.sl)}</span><br><span style="color:#6b7280;">${s.sh} sh @ ${fmt(s.p)}</span></td>
       <td class="c" data-l="Links"><a class="btn" style="background:#2962ff;" href="${tv}" target="_blank">TradingView</a><a class="btn" style="background:#ff6600;" href="${sa}" target="_blank">SA</a></td>
     </tr>
-    <tr class="note"><td colspan="12">${s.note}</td></tr>`;
+    <tr class="note"><td colspan="11">${s.note}</td></tr>`;
   }).join("");
 }
 
 async function refresh() {
   const st = document.getElementById("status");
-  if (!window.cowork || !window.cowork.callMcpTool) { st.textContent = "Live refresh unavailable — showing Aug 12 close."; return; }
+  if (!window.cowork || !window.cowork.callMcpTool) { st.textContent = "Live refresh unavailable — showing August 14 close."; return; }
   let ok = 0;
   for (const s of PICKS) {
     try {
@@ -138,7 +130,7 @@ async function refresh() {
     } catch(e) { /* keep snapshot value */ }
     st.textContent = `Refreshing live prices… ${ok}/${PICKS.length}`;
   }
-  st.textContent = ok > 0 ? `Live prices updated (${ok}/${PICKS.length}) · ${new Date().toLocaleString()}` : "Live refresh failed — showing Aug 12 close.";
+  st.textContent = ok > 0 ? `Live prices updated (${ok}/${PICKS.length}) · ${new Date().toLocaleString()}` : "Live refresh failed — showing August 14 close.";
 }
 
 render();
