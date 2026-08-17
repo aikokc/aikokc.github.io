@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Stock Screener</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f3f4f6; color:#111827; padding:16px; }
+  .card { max-width:1100px; margin:0 auto; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+  .hdr { background:linear-gradient(135deg,#111827,#1e3a5f); padding:20px 24px; }
+  .hdr h1 { margin:0; color:#fff; font-size:19px; font-weight:600; }
+  .hdr p { margin:5px 0 0; color:#9ca3af; font-size:12.5px; }
+  .sub { padding:12px 24px; background:#f8fafc; border-bottom:1px solid #e5e7eb; font-size:12.5px; color:#374151; }
+  #status { font-weight:600; color:#6b7280; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { padding:8px 10px; font-size:10px; color:#6b7280; text-transform:uppercase; border-bottom:1px solid #e5e7eb; background:#f9fafb; text-align:right; }
+  th:nth-child(1), th:nth-child(2), th:nth-child(10) { text-align:left; }
+  th:nth-child(5), th:nth-child(6), th:nth-child(11) { text-align:center; }
+  td { padding:9px 10px; border-bottom:1px solid #e5e7eb; text-align:right; }
+  td.l { text-align:left; } td.c { text-align:center; }
+  .tick { font-weight:700; }
+  .name { color:#6b7280; font-size:12px; text-align:left; }
+  .pat { padding:3px 8px; border-radius:12px; font-size:10.5px; font-weight:600; white-space:nowrap; }
+  .note td { padding:2px 10px 8px; color:#9ca3af; font-size:11px; font-style:italic; border-bottom:1px solid #f1f5f9; text-align:left; }
+  .up { color:#16a34a; } .dn { color:#dc2626; }
+  .btn { display:inline-block; padding:5px 9px; border-radius:6px; font-size:10.5px; font-weight:700; color:#fff !important; text-decoration:none; white-space:nowrap; margin:1px; }
+  .qlink { font-weight:700; text-decoration:none; font-size:12px; white-space:nowrap; }
+  .tpsl { font-size:11px; text-align:left; }
+  .ftr { padding:12px 24px; background:#f8fafc; border-top:1px solid #e5e7eb; font-size:11px; color:#9ca3af; }
+  .stale { color:#9ca3af; font-size:10px; }
+  @media (max-width: 768px) {
+    body { padding:8px; }
+    .hdr { padding:16px; } .sub, .ftr { padding:10px 16px; }
+    table, tbody, tr, td { display:block; width:100%; }
+    thead { display:none; }
+    tr { padding:10px 14px 6px; border-bottom:6px solid #f3f4f6; }
+    tr.note { padding:0 14px 12px; border-bottom:6px solid #f3f4f6; }
+    td { display:flex; justify-content:space-between; align-items:center; gap:10px; text-align:right; border-bottom:none; padding:3px 0; }
+    td::before { content:attr(data-l); color:#9ca3af; font-size:10px; text-transform:uppercase; font-weight:700; letter-spacing:.03em; flex-shrink:0; }
+    td:not([data-l])::before { content:none; }
+    td.l.tick { font-size:16px; padding-bottom:0; }
+    td.name { justify-content:flex-start; color:#6b7280; padding-top:0; }
+    .note td { display:block; text-align:left; padding:4px 0 0; }
+    .tpsl { text-align:right; }
+    td.c[data-l="Links"] { justify-content:flex-end; }
+  }
+
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <h1>📈 Daily Stock Screener</h1>
+    <p>Qullamaggie Momentum · Screened August 14, 2026 (close)</p>
+  </div>
+  <div class="sub">10 picks · ⚠ = caution (very extended / climax risk) · <span id="status">Refreshing live prices…</span> · <a href="archive.html" style="color:#2563eb;text-decoration:none;font-weight:600;">📁 Archive</a></div>
+  <div style="overflow-x:auto;">
+  <table id="tbl">
+    <thead><tr>
+      <th>Ticker</th><th>Name</th><th>Price</th><th>Chg</th><th>Pattern</th>
+      <th>Q</th><th>Fwd P/E</th><th>R/R</th><th>Score</th><th>TP / SL · Position</th><th>Links</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  </div>
+  <div class="ftr">Prices refresh each time this page opens (TradingView/Yahoo). Quant, Fwd P/E, patterns, and targets are a snapshot from the August 14, 2026 screen. Informational only — not investment advice.</div>
+</div>
+<script>
+const PICKS = [
+ {r:1,t:"OSCR",n:"Oscar Health",ex:"NYSE",p:32.76,c:6.43,pat:"Breakout",q:"Strong Buy (4.94)",qr:"Strong Buy",pe:"18.71",rr:1.26,sc:90,tp:36.05,sl:30.14,sh:61,caution:false,note:"Breakout at a fresh 52W high out of a multi-week base; 10/20/50 MAs stacked and rising. R/R below 1.5 — manage by trailing the 10/20-day MA and sell partials into strength."},
+ {r:2,t:"ADI",n:"Analog Devices",ex:"NASDAQ",p:389.39,c:2.16,pat:"Bull Flag",q:"Hold (3.43)",qr:"Hold",pe:"31.32",rr:6.13,sc:88,tp:468.21,sl:376.53,sh:5,caution:false,note:"Textbook tight flag (BBW ~0.10) hugging the 20-MA, within 13% of the 52W high. Trail the 10/20-day MA; sell partials into strength."},
+ {r:3,t:"AAOI",n:"Applied Optoelectronics",ex:"NASDAQ",p:150.28,c:15.53,pat:"Episodic Pivot",q:"Buy (3.85)",qr:"Buy",pe:"221.00",rr:6.33,sc:85,tp:245.35,sl:135.25,sh:13,caution:true,note:"+15.5% catalyst gap on heavy volume — powerful EP. Extended >20% above the 20-MA (climax risk); keep the stop tight and trail the 10/20-day MA, sell partials into strength."},
+ {r:4,t:"VIRT",n:"Virtu Financial",ex:"NYSE",p:60.02,c:4.93,pat:"Bull Flag + Breakout",q:"Strong Buy (4.54)",qr:"Strong Buy",pe:"8.22",rr:5.30,sc:84,tp:71.42,sl:57.87,sh:33,caution:false,note:"Tight flag hugging the 20-MA and pressing the upper band, within 12% of the 52W high. Trail the 10/20-day MA; sell partials into strength."},
+ {r:5,t:"ABT",n:"Abbott Laboratories",ex:"NYSE",p:111.25,c:-0.02,pat:"Bull Flag",q:"Hold (3.35)",qr:"Hold",pe:"20.16",rr:6.47,sc:78,tp:144.36,sl:106.13,sh:17,caution:false,note:"Mega-cap tight consolidation above rising 10/20/50 MAs (RSI ~73). Trail the 10/20-day MA; sell partials into strength."},
+ {r:6,t:"MP",n:"MP Materials",ex:"NYSE",p:58.74,c:5.53,pat:"Breakout",q:"Sell (1.70)",qr:"Sell",pe:"NM",rr:9.90,sc:72,tp:105.26,sl:54.04,sh:34,caution:true,note:"Thrust above the upper band from a multi-week base, but ~41% below the 52W high (TP distant, R/R inflated) and >20% above the 20-MA (climax risk). Weak SA quant. Trail the 10/20-day MA."},
+ {r:7,t:"KGS",n:"Kodiak Gas Services",ex:"NYSE",p:65.35,c:4.74,pat:"Momentum (base building)",q:"Hold (3.07)",qr:"Hold",pe:"25.72",rr:3.47,sc:66,tp:81.56,sl:60.68,sh:30,caution:false,note:"Leader within 16% of the 52W high on rising stacked MAs, but not yet a tight flag — wait for a proper setup. Trail the 10/20-day MA."},
+ {r:8,t:"SEI",n:"Solaris Energy Infrastructure",ex:"NYSE",p:63.30,c:5.68,pat:"Momentum (base building)",q:"Sell (2.00)",qr:"Sell",pe:"62.57",rr:5.38,sc:58,tp:90.50,sl:58.24,sh:31,caution:false,note:"Borderline leadership (~27% below the 52W high) on a wide base; weak SA quant. Watch for a tighter setup. Trail the 10/20-day MA."},
+ {r:9,t:"NMAX",n:"Newsmax",ex:"NYSE",p:10.87,c:14.54,pat:"Episodic Pivot",q:"Hold (2.84)",qr:"Hold",pe:"NM",rr:5.39,sc:55,tp:16.74,sl:9.78,sh:183,caution:true,note:"+14.5% catalyst gap, but RSI ~78 and >20% above the 20-MA (chase risk); small cap (~$1.4B, below the $3B preference). Trail the 10/20-day MA."},
+ {r:10,t:"METC",n:"Ramaco Resources",ex:"NASDAQ",p:12.25,c:16.33,pat:"Episodic Pivot",q:"Strong Sell (1.14)",qr:"Strong Sell",pe:"NM",rr:39.70,sc:48,tp:60.69,sl:11.03,sh:163,caution:false,note:"+16% catalyst gap; small cap and ~79% below the 52W high, so TP is far away and the R/R figure is not meaningful. Weak SA quant. Trail the 10/20-day MA."}
+];
+const PATC = {"Bull Flag":"#7c3aed","Breakout":"#2563eb","Episodic Pivot":"#db2777","Bull Flag + Breakout":"#0891b2","Momentum (base building)":"#6b7280"};
+const QC = {"Strong Buy":"#15803d","Buy":"#16a34a","Hold":"#ca8a04","Sell":"#dc2626","Strong Sell":"#991b1b"};
+const rrc = r => r>=1.8 ? "#16a34a" : r>=1.4 ? "#2563eb" : "#6b7280";
+const fmt = v => "$"+v.toFixed(2);
+
+function render() {
+  document.getElementById("rows").innerHTML = PICKS.map(s => {
+    const pc = PATC[s.pat]||"#6b7280", qc = QC[s.qr]||"#6b7280";
+    const chg = s.c>=0 ? "+"+s.c.toFixed(2)+"%" : s.c.toFixed(2)+"%";
+    const tv = `https://www.tradingview.com/chart/?symbol=${s.ex}%3A${s.t}`;
+    const sa = `https://seekingalpha.com/symbol/${s.t}`;
+    const qr = sa + "/ratings/quant-ratings";
+    return `<tr>
+      <td class="l tick">${s.t}${s.caution?"  ⚠":""}</td>
+      <td class="name">${s.n}</td>
+      <td id="p-${s.t}" data-l="Price">${fmt(s.p)}</td>
+      <td id="c-${s.t}" data-l="1D Change" class="${s.c>=0?"up":"dn"}">${chg}</td>
+      <td class="c" data-l="Pattern"><span class="pat" style="background:${pc}18;color:${pc};">${s.pat}</span></td>
+      <td class="c" data-l="Q"><a class="qlink" style="color:${qc};" href="${qr}" target="_blank">${s.q}</a></td>
+      <td data-l="Fwd P/E">${s.pe}</td>
+      <td data-l="R/R" style="font-weight:600;color:${rrc(s.rr)};">${s.rr.toFixed(2)}:1</td>
+      <td data-l="Score">${s.sc}</td>
+      <td class="tpsl" data-l="TP / SL"><span class="up">${fmt(s.tp)}</span> / <span class="dn">${fmt(s.sl)}</span><br><span style="color:#6b7280;">${s.sh} sh @ ${fmt(s.p)}</span></td>
+      <td class="c" data-l="Links"><a class="btn" style="background:#2962ff;" href="${tv}" target="_blank">TradingView</a><a class="btn" style="background:#ff6600;" href="${sa}" target="_blank">SA</a></td>
+    </tr>
+    <tr class="note"><td colspan="11">${s.note}</td></tr>`;
+  }).join("");
+}
+
+async function refresh() {
+  const st = document.getElementById("status");
+  if (!window.cowork || !window.cowork.callMcpTool) { st.textContent = "Live refresh unavailable — showing August 14 close."; return; }
+  let ok = 0;
+  for (const s of PICKS) {
+    try {
+      const r = await window.cowork.callMcpTool("mcp__tradingview__yahoo_price", { symbol: s.t });
+      let d = r.structuredContent;
+      if (!d && r.content && r.content[0] && r.content[0].text) { try { d = JSON.parse(r.content[0].text); } catch(e){} }
+      if (d && typeof d.price === "number") {
+        const pe = document.getElementById("p-"+s.t), ce = document.getElementById("c-"+s.t);
+        pe.textContent = fmt(d.price);
+        if (typeof d.change_pct === "number") {
+          ce.textContent = (d.change_pct>=0?"+":"")+d.change_pct.toFixed(2)+"%";
+          ce.className = d.change_pct>=0 ? "up" : "dn";
+        }
+        ok++;
+      }
+    } catch(e) { /* keep snapshot value */ }
+    st.textContent = `Refreshing live prices… ${ok}/${PICKS.length}`;
+  }
+  st.textContent = ok > 0 ? `Live prices updated (${ok}/${PICKS.length}) · ${new Date().toLocaleString()}` : "Live refresh failed — showing August 14 close.";
+}
+
+render();
+refresh();
+</script>
+</body>
+</html>
